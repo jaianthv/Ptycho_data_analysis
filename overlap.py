@@ -55,12 +55,19 @@ def find_overlap(R, d):
                 if di != 0:
                     if di < 1000e-9 :
                 #cosin = math.acos(di/(2*R))
-                
-                       Area = Area + (2 * (R**2) * math.acos(di/(2*R)))
+
+                       A1 =  2 * (R**2) * math.acos(di/(2*R))
+                       A2 =  0.5 * di*(4*R**2 - di**2 )**(0.5)
+                       #print (A1-A2)
+
+                       
+                       Area = Area + (A1 - A2)
+                           
                 #Area = Area + (2 * (R**2) * cosin)
                 
             except (ValueError):
                 continue
+            
              
     return Area
    
@@ -82,7 +89,7 @@ def cal_all(R,No,LST,D):
        overlap = find_overlap(R,d)
        #print (overlap)
        if overlap != 0:
-           overlap_area.append(D*(overlap/(3.14*R*R))) # removed +1
+           overlap_area.append(D*(overlap/(3.14*R*R))) # removed +1 multiply with dosage
            ratio.append(d/R)
            
        if d == 2*R:
@@ -124,7 +131,9 @@ def dose_cal(R):
 
 def dose_cal_2(R):
     return 0 
-#d = dose_cal(500e-9)  
+#d = dose_cal(500e-9)
+
+
 x, multi_fac = cal_all(30e-9, 120, 0.5e-9,dose_cal(30))
 
 x1, multi_fac1 = cal_all(250e-9, 500, 1e-9,dose_cal(250))
@@ -143,6 +152,8 @@ def runner():
 #x= 1-0.5*(np.array(x))
 #x1= 1-0.5*(np.array(x1))
 #x2= 1-0.5*(np.array(x2))
+
+x=np.array(x)
 #plt.plot(x,multi_fac, "o--", color = 'black', linewidth= 2)
 
 plt.plot(x,multi_fac,x1,multi_fac1,x2,multi_fac2, linewidth= 4)
@@ -151,8 +162,8 @@ plt.plot(x,multi_fac,x1,multi_fac1,x2,multi_fac2, linewidth= 4)
 #plt.plot(Z_real,Z_imaginary,'o')
 #plt.xscale("log")
 plt.yscale("log")
-#plt.ylabel('Weight factor (k)',fontsize = 24)
-plt.ylabel('Dose (MGy)',fontsize = 24)
+plt.ylabel('Weight factor (k)',fontsize = 24)
+#plt.ylabel('Dose (MGy)',fontsize = 24)
 plt.xlabel('d/R',fontsize = 24)
 #plt.legend(["62 nm","500 nm","1000 nm"])
 plt.yticks(fontsize=12)
